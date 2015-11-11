@@ -17,7 +17,6 @@ $(call import-add-path, /home/grin/bin/cocos2d-x-3.8.1/cocos/prebuilt-mk)
 5) Возможно, даже после этого у вас будут проблемы с компиляцией. У меня кокос генерил битые мэйкфайлы, которые используются системой сборки. Вот пример:
 
 Файл /home/grin/bin/cocos2d-x-3.8.1/external/flatbuffers/Android.mk:
-
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
@@ -28,22 +27,11 @@ LOCAL_MODULE_FILENAME := flatbuffers
 
 ЗДЕСЬ КАКОЙ-ТО ШЛАК!!!!!!!!! ЕГО НАДО УДАЛИТЬ
 
-LOCAL_SRC_FILES := \
-flatc.cpp \
-idl_gen_cpp.cpp \
-idl_gen_fbs.cpp \
-idl_gen_general.cpp \
-idl_gen_go.cpp \
-idl_gen_text.cpp \
-idl_parser.cpp
+LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/flatbuffers.a
 
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/..
+ИЛИ ЗДЕСЬ ШЛАК НЕ ПОМНЮ...
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/..\
-
-LOCAL_CPPFLAGS += -fexceptions
-                                 
-include $(BUILD_STATIC_LIBRARY)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../..
 
 Если вместо предложения про шлак есть что-то, то это надо удалить. Если такое вознинет, лучше спросите у меня.
 
@@ -57,4 +45,4 @@ include $(BUILD_STATIC_LIBRARY)
 9) Если будете что-то делать и комитить, желательно создавать свою ветку в гите. Делается это просто git checkout -b 'имя ветки'. Далее, когда мы договоримся, все посмотрим, будем мёржить.
 
 10) Сейчас там лежит код программы, которая позволяет подгоннектиться двум клиетнам через кокос и увидеть в логе, как появиляется уведомление о том, что другой ткнул в экран. Не советую
-пытаться найти особо стараться запустить. Главное, чтобы оно компилилось и запускалось на устройстве.
+пытаться что-то там найти. Главное, чтобы оно компилилось и запускалось на устройстве.
