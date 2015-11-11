@@ -38,8 +38,6 @@ cocos2d/cocos/platform/android/java/local.properties/
 cocos2d/cocos/platform/android/java/res/
 
 # proj.ios_mac
-cocos2d/build/build/
-cocos2d/build/cocos2d_libs.xcodeproj/xcuserdata/
 proj.ios_mac/build/
 proj.ios_mac/project.xcodeproj/project.xcworkspace/
 proj.ios_mac/project.xcodeproj/xcuserdata/
