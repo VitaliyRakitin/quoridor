@@ -16,7 +16,7 @@ $(call import-add-path, /home/grin/bin/cocos2d-x-3.8.1/cocos/prebuilt-mk)
 
 5) Возможно, даже после этого у вас будут проблемы с компиляцией. У меня кокос генерил битые мэйкфайлы, которые используются системой сборки. Вот пример:
 
-Файл /home/grin/bin/cocos2d-x-3.8.1/external/flatbuffers/Android.mk:
+Файл /home/grin/bin/cocos2d-x-3.8.1/external/flatbuffers/prebuilt-mk/Android.mk:
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
