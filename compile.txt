@@ -1,0 +1,29 @@
+Running command: compile
+Building mode: debug
+Updated project.properties
+Updated local.properties
+Updated file /home/grin/projects/technosfera/advcpp/quorridor/MyCppGame/proj.android/proguard-project.txt
+It seems that there are sub-projects. If you want to update them
+please use the --subprojects parameter.
+Updated project.properties
+Updated local.properties
+Updated file /home/grin/projects/technosfera/advcpp/quorridor/MyCppGame/cocos2d/cocos/platform/android/java/proguard-project.txt
+Android NDK: /home/grin/bin/cocos2d-x-3.8.1/external/flatbuffers/prebuilt-mk/Android.mk: Cannot find module with tag 'photon-cpp-prebuiltd' in import path    
+Android NDK: Are you sure your NDK_MODULE_PATH variable is properly defined ?    
+Android NDK: The following directories were searched:    
+Android NDK:         
+make: Entering directory `/home/grin/projects/technosfera/advcpp/quorridor/MyCppGame/proj.android'
+make: Leaving directory `/home/grin/projects/technosfera/advcpp/quorridor/MyCppGame/proj.android'
+Using Eclipse project : /home/grin/projects/technosfera/advcpp/quorridor/MyCppGame/proj.android
+Android platform not specified, searching a default one...
+running: '/home/grin/Android/Sdk/tools/android update project -t android-10 -p /home/grin/projects/technosfera/advcpp/quorridor/MyCppGame/proj.android'
+
+Android platform not specified, searching a default one...
+running: '/home/grin/Android/Sdk/tools/android update lib-project -p /home/grin/projects/technosfera/advcpp/quorridor/MyCppGame/cocos2d/cocos/platform/android/java -t android-10'
+
+Building native...
+NDK build mode: debug
+NDK_TOOLCHAIN_VERSION: 4.9
+running: '/home/grin/Android/android-ndk-r10e/ndk-build -C /home/grin/projects/technosfera/advcpp/quorridor/MyCppGame/proj.android -j4 NDK_MODULE_PATH=/home/grin/bin/cocos2d-x-3.8.1/:/home/grin/bin/cocos2d-x-3.8.1/cocos/prebuilt-mk:/home/grin/bin/cocos2d-x-3.8.1/cocos:/home/grin/bin/cocos2d-x-3.8.1/external NDK_TOOLCHAIN_VERSION=4.9 NDK_DEBUG=1'
+
+Error running command, return code: 2.

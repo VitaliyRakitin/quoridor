@@ -1,0 +1,141 @@
+#include "AppDelegate.h"
+#include "HelloWorldScene.h"
+#include "SimpleListener.h"
+
+USING_NS_CC;
+
+#define LOGIC_TICK_INTERVAL 0.01f
+
+ExitGames::Common::JString AppDelegate::serverAddress = L"ns.exitgamescloud.com:" + ExitGames::Common::JString(ExitGames::Photon::NetworkPort::TCP);
+ExitGames::Common::JString appId = L"6061fe2f-6a86-49d9-9e76-856493cbd761";
+
+class LogicTick : public CCNode
+{
+public:
+	LogicTick(ExitGames::LoadBalancing::Client* lbc, SimpleListener* lbl, Scene* scene):
+		mLbc(lbc),
+		mLbl(lbl),
+		scene(scene)
+	{
+		schedule(schedule_selector(LogicTick::tick), LOGIC_TICK_INTERVAL);
+	}
+	void tick(float)
+	{
+		mLbl->service();
+		mLbc->service();
+	}
+private:
+	Scene *scene;
+	ExitGames::LoadBalancing::Client* mLbc;
+	SimpleListener* mLbl;
+};
+
+static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
+static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
+static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
+static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
+
+AppDelegate::AppDelegate() {
+
+}
+
+AppDelegate::~AppDelegate() 
+{
+}
+
+//if you want a different context,just modify the value of glContextAttrs
+//it will takes effect on all platforms
+void AppDelegate::initGLContextAttrs()
+{
+    //set OpenGL context attributions,now can only set six attributions:
+    //red,green,blue,alpha,depth,stencil
+    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
+
+    GLView::setGLContextAttrs(glContextAttrs);
+}
+
+// If you want to use packages manager to install more packages, 
+// don't modify or remove this function
+static int register_all_packages()
+{
+    return 0; //flag for packages manager
+}
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    // initialize director
+    auto director = Director::getInstance();
+    auto glview = director->getOpenGLView();
+    if(!glview) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+        glview = GLViewImpl::createWithRect("MyCppGame", Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+#else
+        glview = GLViewImpl::create("MyCppGame");
+#endif
+        director->setOpenGLView(glview);
+    }
+
+    // turn on display FPS
+    director->setDisplayStats(true);
+
+    // set FPS. the default value is 1.0/60 if you don't call this
+    director->setAnimationInterval(1.0 / 60);
+
+    // Set the design resolution
+    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
+    Size frameSize = glview->getFrameSize();
+    // if the frame's height is larger than the height of medium size.
+    if (frameSize.height > mediumResolutionSize.height)
+    {        
+        director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
+    }
+    // if the frame's height is larger than the height of small size.
+    else if (frameSize.height > smallResolutionSize.height)
+    {        
+        director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height, mediumResolutionSize.width/designResolutionSize.width));
+    }
+    // if the frame's height is smaller than the height of medium size.
+    else
+    {        
+        director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
+    }
+
+    register_all_packages();
+
+    // create a scene. it's an autorelease object
+    auto scene = HelloWorld::createScene();
+    cocos2d::log("GRINLOG:Scene created\n");
+
+    SimpleListener *listener = new SimpleListener();
+
+    ExitGames::LoadBalancing::Client *client = new ExitGames::LoadBalancing::Client(*listener, appId, ExitGames::Common::JString(L"1.0"), ExitGames::Common::JString(L"Zlush") + GETTIMEMS());
+    cocos2d::log("GRINLOG:client created\n");
+    listener->setLBC(client);
+    HelloWorld::lbl = listener;
+    bool res = listener->connect();
+    cocos2d::log("GRINLOG:connect returned %d\n", res ? 1 : 0);
+    LogicTick* logicTick = new LogicTick(client, listener, scene);
+    scene->addChild(logicTick);
+    cocos2d::log("GRINLOG:Child added\n");
+    //peer->connect()
+
+    // run
+    director->runWithScene(scene);
+
+    return true;
+}
+
+// This function will be called when the app is inactive. When comes a phone call,it's be invoked too
+void AppDelegate::applicationDidEnterBackground() {
+    Director::getInstance()->stopAnimation();
+
+    // if you use SimpleAudioEngine, it must be pause
+    // SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+}
+
+// this function will be called when the app is active again
+void AppDelegate::applicationWillEnterForeground() {
+    Director::getInstance()->startAnimation();
+
+    // if you use SimpleAudioEngine, it must resume here
+    // SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+}
