@@ -1,13 +1,15 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "SimpleListener.h"
+#include "GameLogic.h"
 
 USING_NS_CC;
 
 #define LOGIC_TICK_INTERVAL 0.01f
 
-ExitGames::Common::JString AppDelegate::serverAddress = L"ns.exitgamescloud.com:" + ExitGames::Common::JString(ExitGames::Photon::NetworkPort::TCP);
-ExitGames::Common::JString appId = L"6061fe2f-6a86-49d9-9e76-856493cbd761";
+using namespace quoridor;
+
+GameLogic *GameLogic::instance = nullptr;
 
 class LogicTick : public CCNode
 {
@@ -101,25 +103,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-    cocos2d::log("GRINLOG:Scene created\n");
-
-    SimpleListener *listener = new SimpleListener();
-
-    ExitGames::LoadBalancing::Client *client = new ExitGames::LoadBalancing::Client(*listener, appId, ExitGames::Common::JString(L"1.0"), ExitGames::Common::JString(L"Zlush") + GETTIMEMS());
-    cocos2d::log("GRINLOG:client created\n");
-    listener->setLBC(client);
-    HelloWorld::lbl = listener;
-    bool res = listener->connect();
-    cocos2d::log("GRINLOG:connect returned %d\n", res ? 1 : 0);
-    LogicTick* logicTick = new LogicTick(client, listener, scene);
-    scene->addChild(logicTick);
-    cocos2d::log("GRINLOG:Child added\n");
-    //peer->connect()
-
-    // run
-    director->runWithScene(scene);
+    GameLogic::getInstance()->startGame();
 
     return true;
 }

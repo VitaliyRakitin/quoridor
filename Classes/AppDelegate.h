@@ -38,7 +38,6 @@ public:
     */
     virtual void applicationWillEnterForeground();
 
-    static ExitGames::Common::JString serverAddress;
 };
 
 #endif // _APP_DELEGATE_H_
