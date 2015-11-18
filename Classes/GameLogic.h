@@ -9,13 +9,16 @@
 #include "UIAdapter.h"
 #include "cocos2d.h"
 #include "Photon-cpp/inc/PhotonPeer.h"
+#include "NetworkListener.h"
 
 namespace quoridor {
 	class UIAdapter;
+	class NetworkListener;
 	class GameLogic {
 	private:
 		UIAdapter *ui_adapter = nullptr;
 		static GameLogic *instance;
+		NetworkListener *network_listener = nullptr;
 		GameLogic() = default;
 	public:
 		static const ExitGames::Common::JString serverAddress;

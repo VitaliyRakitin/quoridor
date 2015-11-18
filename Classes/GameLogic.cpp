@@ -14,9 +14,11 @@ GameLogic *GameLogic::getInstance() {
 }
 
 void GameLogic::startGame() {
+	//initializing NetworkListener
 	this->ui_adapter->renderLogInScence();
 }
 
 GameLogic::~GameLogic() {
 	delete this->ui_adapter;
+	//delete this->network_listener;
 }
