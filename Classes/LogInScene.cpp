@@ -29,7 +29,6 @@ LogInScene* LogInScene::createScene()
     button->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 35));
     button->addTouchEventListener([=](Ref* pSender, ui::Widget::TouchEventType type) {
     	if (type == ui::Widget::TouchEventType::ENDED) {
-    		cocos2d::log("GRINLOG: button clicked");
     		std::string text = textField->getStringValue();
     		cocos2d::log("GRINLOG: button clicked %s", text.c_str());
     		ui_adapter->logIn(text);

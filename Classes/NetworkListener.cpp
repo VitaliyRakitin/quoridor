@@ -32,7 +32,15 @@ void NetworkListener::warningReturn(int warningCode){cocos2d::log("GRINLOG:warni
 void NetworkListener::serverErrorReturn(int errorCode){cocos2d::log("GRINLOG:serverErrorReturn %d\n", errorCode);}
 
 // events, triggered by certain operations of all players in the same room
-void NetworkListener::joinRoomEventAction(int playerNr, const Common::JVector<int>& playernrs, const Player& player){cocos2d::log("GRINLOG:joinRoomEventAction\n");}
+void NetworkListener::joinRoomEventAction(int playerNr, const Common::JVector<int>& playernrs, const Player& player){
+	cocos2d::log("GRINLOG:joinRoomEventAction\n");
+	auto cur_room_name = mLbc->getCurrentlyJoinedRoom().getName();
+	if (cur_room_name == NetworkListener::commonRoom) {
+		for (auto iter = observers.begin(); iter < observers.end(); iter++) {
+			(*iter)->receiveMessage();
+		}
+	}
+}
 void NetworkListener::leaveRoomEventAction(int playerNr, bool isInactive){cocos2d::log("GRINLOG:leaveRoomEventAction\n");}
 
 void NetworkListener::customEventAction(int playerNr, nByte eventCode, const Common::Object& eventContent){
@@ -71,12 +79,6 @@ void NetworkListener::webRpcReturn(int errorCode, const Common::JString& errorSt
 // info, that certain values have been updated
 void NetworkListener::onRoomListUpdate(void) {
 	cocos2d::log("GRINLOG:onRoomListUpdate\n");
-	auto cur_room_name = mLbc->getCurrentlyJoinedRoom().getName();
-	if (cur_room_name == NetworkListener::commonRoom) {
-		for (auto iter = observers.begin(); iter < observers.end(); iter++) {
-			(*iter)->receiveMessage();
-		}
-	}
 	auto roomNames = mLbc->getRoomNameList();
 	if (roomNames.getIsEmpty()) {
 		bool res = mLbc->opCreateRoom(NetworkListener::commonRoom, true, true, COMMON_ROOM_SIZE);

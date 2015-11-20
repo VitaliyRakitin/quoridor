@@ -1,20 +1,30 @@
 #pragma once
 #include <string>
 #include "cocos2d.h"
+#include <thread>
+#include <functional>
+#include <chrono>
 
-#define LOGIC_TICK_INTERVAL 0.01f
+#define LOGIC_TICK_INTERVAL 30
 
 USING_NS_CC;
 
-class LogicTick : public CCNode {
+class LogicTick {
+private:
+	std::thread task_thread;
 public:
 	LogicTick(ExitGames::LoadBalancing::Client* lbc):
 		mLbc(lbc)
 	{
-		schedule(schedule_selector(LogicTick::tick), LOGIC_TICK_INTERVAL);
+		task_thread = std::thread([=](){
+			while (true) {
+				LogicTick::tick();
+				std::this_thread::sleep_for(std::chrono::milliseconds(LOGIC_TICK_INTERVAL));
+			}
+		});
+		task_thread.detach();
 	}
-	void tick(float) {
-		cocos2d::log("GRINLOG: tick");
+	void tick() {
 		mLbc->service();
 	}
 

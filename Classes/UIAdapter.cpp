@@ -17,14 +17,6 @@ void UIAdapter::logIn(std::string &username) {
 void UIAdapter::renderLogInScence() {
 	auto director = cocos2d::Director::getInstance();
 	auto cur_scene = LogInScene::createScene();
-	rootScene->addChild(cur_scene);
-	director->replaceScene(cur_scene);
+	director->runWithScene(cur_scene);
 }
 
-void UIAdapter::setRootScene(cocos2d::CCScene* in_scene) {
-	rootScene = in_scene;
-}
-
-cocos2d::CCScene* UIAdapter::getRootScene() {
-	return rootScene;
-}

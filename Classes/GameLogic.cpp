@@ -17,11 +17,7 @@ GameLogic *GameLogic::getInstance() {
 
 void GameLogic::startGame() {
 	//initializing NetworkListener
-	auto rootScene = CCScene::create();
-	auto cur_scene = LogInScene::createScene();
-	rootScene->addChild(cur_scene);
-	Director::getInstance()->runWithScene(rootScene);
-	//this->ui_adapter->renderLogInScence();
+	this->ui_adapter->renderLogInScence();
 }
 
 void GameLogic::connect(std::string &username) {
@@ -30,7 +26,6 @@ void GameLogic::connect(std::string &username) {
 	auto client = new ExitGames::LoadBalancing::Client(*network_listener, appId, version, ExitGames::Common::JString(username.c_str()));
 	network_listener->setLBC(client);
 	ticker = new LogicTick(client);
-	ui_adapter->getRootScene()->addChild(ticker);
 	bool res = client->connect();
 	cocos2d::log("GRINLOG: GameLogic::connect returned %d", res ? 1 : 0);
 }
@@ -42,6 +37,7 @@ void GameLogic::receiveMessage() {
 
 GameLogic::~GameLogic() {
 	delete this->ui_adapter;
+	delete ticker;
 	//delete this->network_listener;
 }
 
