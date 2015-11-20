@@ -17,7 +17,7 @@ GameLogic *GameLogic::getInstance() {
 
 void GameLogic::startGame() {
 	//initializing NetworkListener
-	this->ui_adapter->renderLogInScence();
+	this->ui_adapter->start();
 }
 
 void GameLogic::connect(std::string &username) {

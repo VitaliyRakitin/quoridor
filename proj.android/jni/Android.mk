@@ -11,7 +11,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/NetworkListener.cpp \
                    ../../Classes/UIAdapter.cpp \
                    ../../Classes/LogInScene.cpp \
-                   ../../Classes/GameLogic.cpp
+                   ../../Classes/GameLogic.cpp \
+                   ../../Classes/StartScene.cpp
 
 MY_PHOTON_PATH = /home/grin/projects/technosfera/advcpp/quorridor/Photon-AndroidNDK-Sdk_v4-0-4-1/
 

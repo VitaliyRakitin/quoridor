@@ -18,7 +18,7 @@ USING_NS_CC;
 namespace quoridor {
 	class GameLogic: NetworkObserver {
 	private:
-		LogicTick *ticker;
+		LogicTick *ticker = nullptr;
 		UIAdapter *ui_adapter = nullptr;
 		static GameLogic *instance;
 		NetworkListener *network_listener = nullptr;

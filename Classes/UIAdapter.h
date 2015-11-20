@@ -16,6 +16,8 @@ namespace quoridor {
 		void logIn(std::string &username);
 		UIAdapter();
 		void renderLogInScence();
+		void onNetworkGameChosen();
+		void start();
 	};
 }
 
