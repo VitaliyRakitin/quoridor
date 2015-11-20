@@ -11,6 +11,7 @@ using namespace quoridor;
 
 GameLogic *GameLogic::instance = nullptr;
 
+/*
 class LogicTick : public CCNode
 {
 public:
@@ -31,6 +32,7 @@ private:
 	ExitGames::LoadBalancing::Client* mLbc;
 	SimpleListener* mLbl;
 };
+*/
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);

@@ -8,8 +8,7 @@ LOCAL_MODULE_FILENAME := libcocos2dcpp
 
 LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/AppDelegate.cpp \
-                   ../../Classes/HelloWorldScene.cpp \
-                   ../../Classes/SimpleListener.cpp \
+                   ../../Classes/NetworkListener.cpp \
                    ../../Classes/UIAdapter.cpp \
                    ../../Classes/LogInScene.cpp \
                    ../../Classes/GameLogic.cpp

@@ -7,6 +7,9 @@
 #include "NetworkListener.h"
 #include <iostream>
 using namespace ExitGames;
+
+ExitGames::Common::JString NetworkListener::commonRoom = "Common Room";
+
 NetworkListener::NetworkListener(): mLbc(NULL) {}
 NetworkListener::~NetworkListener() {}
 void NetworkListener::setLBC(ExitGames::LoadBalancing::Client* pLbc) {
@@ -50,7 +53,13 @@ void NetworkListener::connectReturn(int errorCode, const Common::JString& errorS
 
 void NetworkListener::disconnectReturn(void){cocos2d::log("GRINLOG:disconnectReturn\n");}
 void NetworkListener::createRoomReturn(int localPlayerNr, const Common::Hashtable& roomProperties, const Common::Hashtable& playerProperties, int errorCode, const Common::JString& errorString){cocos2d::log("GRINLOG:createRoomReturn\n");}
-void NetworkListener::joinRoomReturn(int localPlayerNr, const Common::Hashtable& roomProperties, const Common::Hashtable& playerProperties, int errorCode, const Common::JString& errorString){cocos2d::log("GRINLOG:joinRoomReturn\n");}
+
+void NetworkListener::joinRoomReturn(int localPlayerNr, const Common::Hashtable& roomProperties, const Common::Hashtable& playerProperties, int errorCode, const Common::JString& errorString){
+
+	cocos2d::log("GRINLOG:joinRoomReturn\n");
+
+}
+
 void NetworkListener::joinRandomRoomReturn(int localPlayerNr, const Common::Hashtable& roomProperties, const Common::Hashtable& playerProperties, int errorCode, const Common::JString& errorString){cocos2d::log("GRINLOG:joinRandomRoomReturn\n");}
 void NetworkListener::leaveRoomReturn(int errorCode, const Common::JString& errorString){cocos2d::log("GRINLOG:leaveRoomReturn\n");}
 void NetworkListener::joinLobbyReturn(void){cocos2d::log("GRINLOG:joinLobbyReturn\n");}
@@ -62,14 +71,19 @@ void NetworkListener::webRpcReturn(int errorCode, const Common::JString& errorSt
 // info, that certain values have been updated
 void NetworkListener::onRoomListUpdate(void) {
 	cocos2d::log("GRINLOG:onRoomListUpdate\n");
-	const ExitGames::Common::JString roomName = L"Room1";
+	auto cur_room_name = mLbc->getCurrentlyJoinedRoom().getName();
+	if (cur_room_name == NetworkListener::commonRoom) {
+		for (auto iter = observers.begin(); iter < observers.end(); iter++) {
+			(*iter)->receiveMessage();
+		}
+	}
 	auto roomNames = mLbc->getRoomNameList();
 	if (roomNames.getIsEmpty()) {
-		bool res = mLbc->opCreateRoom(roomName, true, true, 4);
+		bool res = mLbc->opCreateRoom(NetworkListener::commonRoom, true, true, COMMON_ROOM_SIZE);
 		cocos2d::log("GRINLOG:opCreatedRoom: %d\n", res ? 1 : 0);
 	}
 	else {
-		bool res = mLbc->opJoinRoom(roomName);
+		bool res = mLbc->opJoinRoom(NetworkListener::commonRoom);
 		cocos2d::log("GRINLOG:opJoinedRoom: %d\n", res ? 1 : 0);
 	}
 }
@@ -87,7 +101,9 @@ void NetworkListener::onAvailableRegions(const Common::JVector<Common::JString>&
 
 void NetworkListener::onSecretReceival(const Common::JString& secret){cocos2d::log("GRINLOG:onSecretReceival\n");}
 
-
+void NetworkListener::registerNetworkObserver(NetworkObserver *observer) {
+	observers.push_back(observer);
+}
 
 
 

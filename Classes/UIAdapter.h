@@ -6,17 +6,18 @@
  */
 #pragma once
 
-#include "GameLogic.h"
 #include "cocos2d.h"
+#include <string>
 
 namespace quoridor {
-	class GameLogic;
 	class UIAdapter {
 	private:
-		cocos2d::Scene *cur_scene = nullptr;
-		GameLogic *game_logic = nullptr;
+		cocos2d::CCScene* rootScene = nullptr;
 	public:
-		UIAdapter(GameLogic *g_l):game_logic(g_l){};
+		void setRootScene(cocos2d::CCScene* in_scene);
+		cocos2d::CCScene* getRootScene();
+		void logIn(std::string &username);
+		UIAdapter();
 		void renderLogInScence();
 	};
 }
