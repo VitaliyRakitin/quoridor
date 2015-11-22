@@ -14,12 +14,15 @@
 #include "LoadBalancing-cpp/inc/Internal/PlayerFactory.h"
 #include "LoadBalancing-cpp/inc/Internal/PlayerPropertiesCacher.h"
 #include <vector>
+#include <string>
+
 #include "NetworkInterface.h"
 
 #define COMMON_ROOM_SIZE 1024
 
 using namespace ExitGames;
 using namespace ExitGames::LoadBalancing;
+using namespace std;
 
 class NetworkListener: public ExitGames::LoadBalancing::Listener {
 public:
@@ -30,7 +33,9 @@ public:
 	void service(void);
 	ExitGames::LoadBalancing::Client* mLbc;
 	void registerNetworkObserver(NetworkObserver *observer);
+	vector<string>& getAllPlayersInCurrentRoom();
 private:
+	vector<string> current_room_players;
 	static ExitGames::Common::JString commonRoom;
 	std::vector<NetworkObserver*> observers;
 	// receive and print out debug out here

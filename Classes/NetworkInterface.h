@@ -5,26 +5,18 @@
 #include <functional>
 #include <chrono>
 
-#define LOGIC_TICK_INTERVAL 30
+#define LOGIC_TICK_INTERVAL 0.01f
 
 USING_NS_CC;
 
-class LogicTick {
-private:
-	std::thread task_thread;
+class LogicTick: public cocos2d::CCNode {
 public:
 	LogicTick(ExitGames::LoadBalancing::Client* lbc):
 		mLbc(lbc)
 	{
-		task_thread = std::thread([=](){
-			while (true) {
-				LogicTick::tick();
-				std::this_thread::sleep_for(std::chrono::milliseconds(LOGIC_TICK_INTERVAL));
-			}
-		});
-		task_thread.detach();
+		schedule(schedule_selector(LogicTick::tick), LOGIC_TICK_INTERVAL);
 	}
-	void tick() {
+	void tick(float) {
 		mLbc->service();
 	}
 
@@ -33,9 +25,17 @@ private:
 };
 
 class NetworkMessage {
+public:
+	typedef enum {
+		MESSAGE_COMMON_ROOM_CONNECTED,
+		MESSAGE_
+	} MessageType;
 private:
+	MessageType type;
 	std::string text;
 public:
+	NetworkMessage(MessageType in_type):type(in_type){}
+	MessageType get_type() {return type;}
 	std::string get_text() {
 		return text;
 	}
@@ -44,6 +44,6 @@ public:
 
 class NetworkObserver {
 public:
-	virtual void receiveMessage() = 0;
+	virtual void receiveMessage(NetworkMessage message) = 0;
 	virtual ~NetworkObserver(){};
 };

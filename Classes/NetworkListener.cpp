@@ -6,6 +6,8 @@
  */
 #include "NetworkListener.h"
 #include <iostream>
+#include <thread>
+#include <functional>
 using namespace ExitGames;
 
 ExitGames::Common::JString NetworkListener::commonRoom = "Common Room";
@@ -37,9 +39,10 @@ void NetworkListener::joinRoomEventAction(int playerNr, const Common::JVector<in
 	auto cur_room_name = mLbc->getCurrentlyJoinedRoom().getName();
 	if (cur_room_name == NetworkListener::commonRoom) {
 		for (auto iter = observers.begin(); iter < observers.end(); iter++) {
-			(*iter)->receiveMessage();
+			(*iter)->receiveMessage(NetworkMessage::MessageType::MESSAGE_COMMON_ROOM_CONNECTED);
 		}
 	}
+	cocos2d::log("GRINLOG:joinRoomEventAction finished\n");
 }
 void NetworkListener::leaveRoomEventAction(int playerNr, bool isInactive){cocos2d::log("GRINLOG:leaveRoomEventAction\n");}
 
@@ -107,5 +110,17 @@ void NetworkListener::registerNetworkObserver(NetworkObserver *observer) {
 	observers.push_back(observer);
 }
 
-
-
+vector<string>& NetworkListener::getAllPlayersInCurrentRoom() {
+	current_room_players.clear();
+	auto room = mLbc->getCurrentlyJoinedRoom();
+	auto n_players = room.getPlayerCount();
+	cocos2d::log("GRINLOG:NetworkListener::getAllPlayersInCurrentRoom, n_players = %d", n_players);
+	auto all_players = room.getPlayers();
+	for (int i = 0; i < n_players; i++) {
+		auto player = all_players[i];
+		auto name = player->getName().ANSIRepresentation().cstr();
+		auto str_name = string(name);
+		current_room_players.push_back(str_name);
+	}
+	return current_room_players;
+}

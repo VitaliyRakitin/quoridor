@@ -1,9 +1,9 @@
 {
     "ndk_module_path" :[
-        "/home/grin/bin/cocos2d-x-3.8.1/",
-        "/home/grin/bin/cocos2d-x-3.8.1/cocos/prebuilt-mk",
-        "/home/grin/bin/cocos2d-x-3.8.1/cocos",
-        "/home/grin/bin/cocos2d-x-3.8.1/external"
+        "/home/grin/bin/cocos2d-x-3.9/",
+        "/home/grin/bin/cocos2d-x-3.9/cocos/prebuilt-mk",
+        "/home/grin/bin/cocos2d-x-3.9/cocos",
+        "/home/grin/bin/cocos2d-x-3.9/external"
     ],
     "copy_resources": [
         {

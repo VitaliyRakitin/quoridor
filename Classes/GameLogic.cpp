@@ -25,13 +25,22 @@ void GameLogic::connect(std::string &username) {
 	network_listener->registerNetworkObserver(this);
 	auto client = new ExitGames::LoadBalancing::Client(*network_listener, appId, version, ExitGames::Common::JString(username.c_str()));
 	network_listener->setLBC(client);
-	ticker = new LogicTick(client);
 	bool res = client->connect();
+	ticker = new LogicTick(client);
+	ticker->retain();
+	ui_adapter->addTickerToCurrentScene();
 	cocos2d::log("GRINLOG: GameLogic::connect returned %d", res ? 1 : 0);
 }
 
-void GameLogic::receiveMessage() {
+void GameLogic::receiveMessage(NetworkMessage message) {
 	cocos2d::log("GRINLOG:Message from observer received");
+	switch (message.get_type()) {
+		case NetworkMessage::MessageType::MESSAGE_COMMON_ROOM_CONNECTED:
+			state = GameState::GAME_STATE_CONNECTED_TO_SERVER;
+			auto all_players = network_listener->getAllPlayersInCurrentRoom();
+			ui_adapter->renderChooseOpponentScene(all_players);
+			break;
+	}
 }
 
 
@@ -43,4 +52,8 @@ GameLogic::~GameLogic() {
 
 UIAdapter* GameLogic::getUIAdapter() {
 	return instance->ui_adapter;
+}
+
+LogicTick *GameLogic::getTicker() {
+	return GameLogic::getInstance()->ticker;
 }

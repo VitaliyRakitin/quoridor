@@ -5,8 +5,6 @@
 
 USING_NS_CC;
 
-#define LOGIC_TICK_INTERVAL 0.01f
-
 using namespace quoridor;
 
 GameLogic *GameLogic::instance = nullptr;

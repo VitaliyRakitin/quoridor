@@ -1,10 +1,13 @@
 #include "LogInScene.h"
 #include "ui/CocosGUI.h"
 #include <string>
+#include <vector>
 #include "GameLogic.h"
+#include "ChooseOpponentScene.h"
 
 using namespace quoridor;
 using namespace cocos2d;
+using namespace std;
 
 LogInScene* LogInScene::createScene()
 {

@@ -12,7 +12,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/UIAdapter.cpp \
                    ../../Classes/LogInScene.cpp \
                    ../../Classes/GameLogic.cpp \
-                   ../../Classes/StartScene.cpp
+                   ../../Classes/StartScene.cpp \
+                   ../../Classes/ChooseOpponentScene.cpp
 
 MY_PHOTON_PATH = /home/grin/projects/technosfera/advcpp/quorridor/Photon-AndroidNDK-Sdk_v4-0-4-1/
 
@@ -29,7 +30,7 @@ LOCAL_STATIC_LIBRARIES := cocos2dx_static photon-cpp-static-prebuilt common-cpp-
 
 include $(BUILD_SHARED_LIBRARY)
 
-$(call import-add-path, /home/grin/bin/cocos2d-x-3.8.1/cocos/prebuilt-mk)
+$(call import-add-path, /home/grin/bin/cocos2d-x-3.9/cocos/prebuilt-mk)
 $(call import-module,.)
 
 $(call import-add-path, $(MY_PHOTON_PATH)/Photon-cpp/lib)
