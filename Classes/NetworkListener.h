@@ -34,6 +34,7 @@ public:
 	ExitGames::LoadBalancing::Client* mLbc;
 	void registerNetworkObserver(NetworkObserver *observer);
 	vector<string>& getAllPlayersInCurrentRoom();
+	string getLocalPlayerName();
 private:
 	vector<string> current_room_players;
 	static ExitGames::Common::JString commonRoom;

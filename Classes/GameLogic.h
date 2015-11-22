@@ -31,6 +31,7 @@ namespace quoridor {
 		static GameLogic *instance;
 		NetworkListener *network_listener = nullptr;
 		GameLogic() = default;
+		std::string local_player_name;
 	public:
 		//from NetworkObserver
 		virtual void receiveMessage(NetworkMessage message);

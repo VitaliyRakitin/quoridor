@@ -116,11 +116,18 @@ vector<string>& NetworkListener::getAllPlayersInCurrentRoom() {
 	auto n_players = room.getPlayerCount();
 	cocos2d::log("GRINLOG:NetworkListener::getAllPlayersInCurrentRoom, n_players = %d", n_players);
 	auto all_players = room.getPlayers();
+	auto local_player_name = getLocalPlayerName();
 	for (int i = 0; i < n_players; i++) {
 		auto player = all_players[i];
 		auto name = player->getName().ANSIRepresentation().cstr();
 		auto str_name = string(name);
-		current_room_players.push_back(str_name);
+		if (str_name != local_player_name) {
+			current_room_players.push_back(str_name);
+		}
 	}
 	return current_room_players;
+}
+
+string NetworkListener::getLocalPlayerName() {
+	return string(mLbc->getLocalPlayer().getName().ANSIRepresentation().cstr());
 }
