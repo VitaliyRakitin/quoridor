@@ -52,9 +52,13 @@ GameLogic::~GameLogic() {
 }
 
 UIAdapter* GameLogic::getUIAdapter() {
-	return instance->ui_adapter;
+	return getInstance()->ui_adapter;
 }
 
 LogicTick *GameLogic::getTicker() {
 	return GameLogic::getInstance()->ticker;
+}
+
+void GameLogic::makeGameRequest(std::string &opponent) {
+	network_listener->sendGameRequestToOpponent(opponent);
 }

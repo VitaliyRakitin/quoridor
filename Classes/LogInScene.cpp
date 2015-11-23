@@ -17,6 +17,7 @@ LogInScene* LogInScene::createScene()
     Size visibleSize = director->getVisibleSize();
     auto ui_adapter = GameLogic::getUIAdapter();
 
+
     /*
     Label *label1 = Label::createWithSystemFont("Enter your name", "Arial", 20);
     label1->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));

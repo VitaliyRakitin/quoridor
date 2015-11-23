@@ -56,3 +56,7 @@ void UIAdapter::addLogicTick(cocos2d::Scene *scene) {
 void UIAdapter::addTickerToCurrentScene() {
 	addLogicTick(cur_scene);
 }
+
+void UIAdapter::onOpponentChosen(string &opponent) {
+	GameLogic::getInstance()->makeGameRequest(opponent);
+}

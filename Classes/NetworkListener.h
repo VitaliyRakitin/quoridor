@@ -35,10 +35,14 @@ public:
 	void registerNetworkObserver(NetworkObserver *observer);
 	vector<string>& getAllPlayersInCurrentRoom();
 	string getLocalPlayerName();
+	void sendGameRequestToOpponent(string &opponent);
 private:
 	vector<string> current_room_players;
+	vector<int> current_room_players_numbers;
 	static ExitGames::Common::JString commonRoom;
 	std::vector<NetworkObserver*> observers;
+
+	int getIntForPlayer(string &player);
 	// receive and print out debug out here
 	virtual void debugReturn(int debugLevel, const Common::JString& string);
 

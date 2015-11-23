@@ -45,6 +45,7 @@ namespace quoridor {
 		void startGame();
 		void connect(std::string &username);
 		static LogicTick *getTicker();
+		void makeGameRequest(std::string &opponent);
 		~GameLogic();
 	};
 }

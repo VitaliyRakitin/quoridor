@@ -48,8 +48,9 @@ void NetworkListener::leaveRoomEventAction(int playerNr, bool isInactive){cocos2
 
 void NetworkListener::customEventAction(int playerNr, nByte eventCode, const Common::Object& eventContent){
 	cocos2d::log("GRINLOG:customEventAction: %d\n", eventCode);
-	if (eventCode == 300) {
-		cocos2d::log("GRINLOG:event received\n");
+	switch (eventCode) {
+	case NetworkMessage::MESSAGE_GAME_REQUEST:
+		cocos2d::log("GRINLOG: game request received");
 	}
 }
 
@@ -123,6 +124,7 @@ vector<string>& NetworkListener::getAllPlayersInCurrentRoom() {
 		auto str_name = string(name);
 		if (str_name != local_player_name) {
 			current_room_players.push_back(str_name);
+			current_room_players_numbers.push_back(player->getNumber());
 		}
 	}
 	return current_room_players;
@@ -130,4 +132,20 @@ vector<string>& NetworkListener::getAllPlayersInCurrentRoom() {
 
 string NetworkListener::getLocalPlayerName() {
 	return string(mLbc->getLocalPlayer().getName().ANSIRepresentation().cstr());
+}
+
+void NetworkListener::sendGameRequestToOpponent(string &opponent) {
+	auto from = getLocalPlayerName();
+	auto request = GameRequestMessage(from, opponent);
+	auto recipient_number = getIntForPlayer(opponent);
+	mLbc->opRaiseEvent(false, request.getDictionary(), request.get_type(), 0, 0, &recipient_number, 1);
+}
+
+int NetworkListener::getIntForPlayer(string &player) {
+	for (auto i = 0; i < current_room_players.size(); i++) {
+		if (player == current_room_players[i]) {
+			return current_room_players_numbers[i];
+		}
+	}
+	return -1;
 }

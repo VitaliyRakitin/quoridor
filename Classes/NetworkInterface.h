@@ -4,6 +4,8 @@
 #include <thread>
 #include <functional>
 #include <chrono>
+//#include "Common-cpp/inc/Dictionary.h"
+#include "LoadBalancing-cpp/inc/Client.h"
 
 #define LOGIC_TICK_INTERVAL 0.01f
 
@@ -28,17 +30,24 @@ class NetworkMessage {
 public:
 	typedef enum {
 		MESSAGE_COMMON_ROOM_CONNECTED,
-		MESSAGE_
+		MESSAGE_GAME_REQUEST
 	} MessageType;
-private:
+protected:
 	MessageType type;
-	std::string text;
 public:
 	NetworkMessage(MessageType in_type):type(in_type){}
-	MessageType get_type() {return type;}
-	std::string get_text() {
-		return text;
-	}
+	MessageType get_type();
+};
+
+class GameRequestMessage: public NetworkMessage {
+private:
+	typedef ExitGames::Common::JString keyType;
+	typedef ExitGames::Common::JString valueType;
+	typedef ExitGames::Common::Dictionary<keyType, valueType> DictType;
+	DictType m_dictionary;
+public:
+	GameRequestMessage(std::string &from, std::string &to);
+	DictType& getDictionary();
 };
 
 

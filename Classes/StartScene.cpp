@@ -17,6 +17,7 @@ StartScene* StartScene::createScene()
     Size visibleSize = director->getVisibleSize();
     auto ui_adapter = GameLogic::getUIAdapter();
 
+    MenuItemFont::setFontName("Marker Felt.ttf");
 
     auto localGameItem = MenuItemFont::create("Local Game", [=](Ref *sender){
     	vector<string> v;
