@@ -43,6 +43,7 @@ private:
 	std::vector<NetworkObserver*> observers;
 
 	int getIntForPlayer(string &player);
+	void notifyAllObservers(NetworkMessage *message);
 	// receive and print out debug out here
 	virtual void debugReturn(int debugLevel, const Common::JString& string);
 

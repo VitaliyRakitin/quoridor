@@ -32,15 +32,23 @@ void GameLogic::connect(std::string &username) {
 	cocos2d::log("GRINLOG: GameLogic::connect returned %d", res ? 1 : 0);
 }
 
-void GameLogic::receiveMessage(NetworkMessage message) {
+void GameLogic::receiveMessageGameRequest(NetworkMessage *message) {
+	auto m = (GameRequestMessage*) message;
+	cocos2d::log("GRINLOG: game request received from: %s", m->get_from().c_str());
+}
+
+void GameLogic::receiveMessage(NetworkMessage *message) {
 	cocos2d::log("GRINLOG:Message from observer received");
-	switch (message.get_type()) {
-		case NetworkMessage::MessageType::MESSAGE_COMMON_ROOM_CONNECTED:
-			local_player_name = network_listener->getLocalPlayerName();
-			state = GameState::GAME_STATE_CONNECTED_TO_SERVER;
-			auto all_players = network_listener->getAllPlayersInCurrentRoom();
-			ui_adapter->renderChooseOpponentScene(all_players);
-			break;
+	switch (message->get_type()) {
+	case NetworkMessage::MessageType::MESSAGE_GAME_REQUEST:
+		receiveMessageGameRequest(message);
+		break;
+	case NetworkMessage::MessageType::MESSAGE_COMMON_ROOM_CONNECTED:
+		local_player_name = network_listener->getLocalPlayerName();
+		state = GameState::GAME_STATE_CONNECTED_TO_SERVER;
+		auto all_players = network_listener->getAllPlayersInCurrentRoom();
+		ui_adapter->renderChooseOpponentScene(all_players);
+		break;
 	}
 }
 

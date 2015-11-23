@@ -15,9 +15,9 @@ class LogicTick: public cocos2d::CCNode {
 public:
 	LogicTick(ExitGames::LoadBalancing::Client* lbc):
 		mLbc(lbc)
-	{
+{
 		schedule(schedule_selector(LogicTick::tick), LOGIC_TICK_INTERVAL);
-	}
+}
 	void tick(float) {
 		mLbc->service();
 	}
@@ -40,19 +40,25 @@ public:
 };
 
 class GameRequestMessage: public NetworkMessage {
-private:
+public:
 	typedef ExitGames::Common::JString keyType;
 	typedef ExitGames::Common::JString valueType;
 	typedef ExitGames::Common::Dictionary<keyType, valueType> DictType;
+private:
 	DictType m_dictionary;
+	std::string to;
+	std::string from;
 public:
 	GameRequestMessage(std::string &from, std::string &to);
+	GameRequestMessage(DictType &in_dict);
+	std::string &get_to();
+	std::string &get_from();
 	DictType& getDictionary();
 };
 
 
 class NetworkObserver {
 public:
-	virtual void receiveMessage(NetworkMessage message) = 0;
+	virtual void receiveMessage(NetworkMessage *message) = 0;
 	virtual ~NetworkObserver(){};
 };

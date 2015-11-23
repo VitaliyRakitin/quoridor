@@ -32,9 +32,11 @@ namespace quoridor {
 		NetworkListener *network_listener = nullptr;
 		GameLogic() = default;
 		std::string local_player_name;
+
+		void receiveMessageGameRequest(NetworkMessage *message);
 	public:
 		//from NetworkObserver
-		virtual void receiveMessage(NetworkMessage message);
+		virtual void receiveMessage(NetworkMessage *message);
 		static const ExitGames::Common::JString serverAddress;
 		static const ExitGames::Common::JString appId;
 		static const ExitGames::Common::JString version;

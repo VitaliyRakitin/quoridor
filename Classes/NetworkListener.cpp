@@ -38,9 +38,8 @@ void NetworkListener::joinRoomEventAction(int playerNr, const Common::JVector<in
 	cocos2d::log("GRINLOG:joinRoomEventAction\n");
 	auto cur_room_name = mLbc->getCurrentlyJoinedRoom().getName();
 	if (cur_room_name == NetworkListener::commonRoom) {
-		for (auto iter = observers.begin(); iter < observers.end(); iter++) {
-			(*iter)->receiveMessage(NetworkMessage::MessageType::MESSAGE_COMMON_ROOM_CONNECTED);
-		}
+		NetworkMessage m = NetworkMessage(NetworkMessage::MessageType::MESSAGE_COMMON_ROOM_CONNECTED);
+		notifyAllObservers(&m);
 	}
 	cocos2d::log("GRINLOG:joinRoomEventAction finished\n");
 }
@@ -50,7 +49,9 @@ void NetworkListener::customEventAction(int playerNr, nByte eventCode, const Com
 	cocos2d::log("GRINLOG:customEventAction: %d\n", eventCode);
 	switch (eventCode) {
 	case NetworkMessage::MESSAGE_GAME_REQUEST:
-		cocos2d::log("GRINLOG: game request received");
+		GameRequestMessage::DictType data = ExitGames::Common::ValueObject<GameRequestMessage::DictType>(eventContent).getDataCopy();
+		GameRequestMessage m = GameRequestMessage(data);
+		notifyAllObservers(&m);
 	}
 }
 
@@ -148,4 +149,10 @@ int NetworkListener::getIntForPlayer(string &player) {
 		}
 	}
 	return -1;
+}
+
+void NetworkListener::notifyAllObservers(NetworkMessage *message) {
+	for (auto iter = observers.begin(); iter < observers.end(); iter++) {
+		(*iter)->receiveMessage(message);
+	}
 }
