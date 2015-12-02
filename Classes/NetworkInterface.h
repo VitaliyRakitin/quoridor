@@ -30,7 +30,8 @@ class NetworkMessage {
 public:
 	typedef enum {
 		MESSAGE_COMMON_ROOM_CONNECTED,
-		MESSAGE_GAME_REQUEST
+		MESSAGE_GAME_REQUEST,
+		MESSAGE_GAME_REQUEST_ANSWER
 	} MessageType;
 protected:
 	MessageType type;
@@ -54,6 +55,21 @@ public:
 	std::string &get_to();
 	std::string &get_from();
 	DictType& getDictionary();
+};
+
+class GameRequestAnswerMessage: public NetworkMessage {
+public:
+	typedef ExitGames::Common::Hashtable HashType;
+private:
+	bool answer;
+	std::string opponent;
+	HashType data;
+public:
+	HashType& getData();
+	bool getAnswer();
+	std::string& getOpponent();
+	GameRequestAnswerMessage(bool answer, std::string &in_opponent);
+	GameRequestAnswerMessage(HashType &in_data);
 };
 
 

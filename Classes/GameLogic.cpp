@@ -33,22 +33,51 @@ void GameLogic::connect(std::string &username) {
 }
 
 void GameLogic::receiveMessageGameRequest(NetworkMessage *message) {
-	auto m = (GameRequestMessage*) message;
-	cocos2d::log("GRINLOG: game request received from: %s", m->get_from().c_str());
+	if (state == GAME_STATE_CONNECTED_TO_SERVER) {
+		auto m = (GameRequestMessage*) message;
+		cocos2d::log("GRINLOG: game request received from: %s", m->get_from().c_str());
+		opponent_name = m->get_from();
+		ui_adapter->renderGameRequestScene(opponent_name);
+	}
+}
+
+void GameLogic::receiveMessageGameRequestAnswer(NetworkMessage *message) {
+	if (state == GAME_STATE_SENDING_GAME_REQUEST) {
+		auto m = (GameRequestAnswerMessage*) message;
+		if (m->getAnswer()) {
+			//the opponent accepted our game request, need to start a new game
+			state = GAME_STATE_PLAYING_NETWORK;
+			cocos2d::log("GRINLOG: Now playing with %s", m->getOpponent().c_str());
+		}
+		else {
+			//the opponent rejected our request
+			state = GAME_STATE_CONNECTED_TO_SERVER;
+			cocos2d::log("GRINLOG: Opponent %s rejected our request", m->getOpponent().c_str());
+		}
+	}
 }
 
 void GameLogic::receiveMessage(NetworkMessage *message) {
 	cocos2d::log("GRINLOG:Message from observer received");
 	switch (message->get_type()) {
+	case NetworkMessage::MessageType::MESSAGE_GAME_REQUEST_ANSWER:
+	{
+		receiveMessageGameRequestAnswer(message);
+		break;
+	}
 	case NetworkMessage::MessageType::MESSAGE_GAME_REQUEST:
+	{
 		receiveMessageGameRequest(message);
 		break;
+	}
 	case NetworkMessage::MessageType::MESSAGE_COMMON_ROOM_CONNECTED:
+	{
 		local_player_name = network_listener->getLocalPlayerName();
 		state = GameState::GAME_STATE_CONNECTED_TO_SERVER;
 		auto all_players = network_listener->getAllPlayersInCurrentRoom();
 		ui_adapter->renderChooseOpponentScene(all_players);
 		break;
+	}
 	}
 }
 
@@ -69,4 +98,10 @@ LogicTick *GameLogic::getTicker() {
 
 void GameLogic::makeGameRequest(std::string &opponent) {
 	network_listener->sendGameRequestToOpponent(opponent);
+	state = GAME_STATE_SENDING_GAME_REQUEST;
+}
+
+void GameLogic::acceptGameRequest(bool answer) {
+	auto message = GameRequestAnswerMessage(answer, local_player_name);
+	network_listener->sendMessageToPlayerInCurrentRoom(message, opponent_name);
 }

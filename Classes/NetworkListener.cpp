@@ -49,9 +49,19 @@ void NetworkListener::customEventAction(int playerNr, nByte eventCode, const Com
 	cocos2d::log("GRINLOG:customEventAction: %d\n", eventCode);
 	switch (eventCode) {
 	case NetworkMessage::MESSAGE_GAME_REQUEST:
+	{
 		GameRequestMessage::DictType data = ExitGames::Common::ValueObject<GameRequestMessage::DictType>(eventContent).getDataCopy();
 		GameRequestMessage m = GameRequestMessage(data);
 		notifyAllObservers(&m);
+		break;
+	}
+	case NetworkMessage::MESSAGE_GAME_REQUEST_ANSWER:
+	{
+		GameRequestAnswerMessage::HashType data = ExitGames::Common::ValueObject<GameRequestAnswerMessage::HashType>(eventContent).getDataCopy();
+		auto m = GameRequestAnswerMessage(data);
+		notifyAllObservers(&m);
+		break;
+	}
 	}
 }
 
@@ -155,4 +165,9 @@ void NetworkListener::notifyAllObservers(NetworkMessage *message) {
 	for (auto iter = observers.begin(); iter < observers.end(); iter++) {
 		(*iter)->receiveMessage(message);
 	}
+}
+
+void NetworkListener::sendMessageToPlayerInCurrentRoom(GameRequestAnswerMessage& message, string &opponent_name) {
+	auto recipient_number = getIntForPlayer(opponent_name);
+	mLbc->opRaiseEvent(false, message.getData(), message.get_type(), 0, 0, &recipient_number, 1);
 }

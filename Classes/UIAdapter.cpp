@@ -3,6 +3,7 @@
 #include "GameLogic.h"
 #include "StartScene.h"
 #include "ChooseOpponentScene.h"
+#include "AcceptGameRequestScene.h"
 
 USING_NS_CC;
 
@@ -59,4 +60,14 @@ void UIAdapter::addTickerToCurrentScene() {
 
 void UIAdapter::onOpponentChosen(string &opponent) {
 	GameLogic::getInstance()->makeGameRequest(opponent);
+}
+
+void UIAdapter::renderGameRequestScene(string &opponent) {
+	cur_scene = AcceptGameRequestScene::createScene(opponent);
+	addTickerToCurrentScene();
+	Director::getInstance()->replaceScene(cur_scene);
+}
+
+void UIAdapter::acceptGameRequest(bool answer) {
+	GameLogic::getInstance()->acceptGameRequest(answer);
 }

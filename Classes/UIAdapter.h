@@ -26,6 +26,8 @@ namespace quoridor {
 		void start();
 		void addTickerToCurrentScene();
 		void onOpponentChosen(string &opponent);
+		void renderGameRequestScene(string &opponent);
+		void acceptGameRequest(bool answer);
 	};
 }
 

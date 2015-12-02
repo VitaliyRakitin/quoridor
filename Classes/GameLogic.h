@@ -22,7 +22,8 @@ namespace quoridor {
 			GAME_STATE_INACTIVE,
 			GAME_STATE_CONNECTED_TO_SERVER,
 			GAME_STATE_SENDING_GAME_REQUEST,
-			GAME_STATE_PLAYING
+			GAME_STATE_PLAYING_LOCAL,
+			GAME_STATE_PLAYING_NETWORK
 		} GameState;
 	private:
 		GameState state = GAME_STATE_INACTIVE;
@@ -32,8 +33,10 @@ namespace quoridor {
 		NetworkListener *network_listener = nullptr;
 		GameLogic() = default;
 		std::string local_player_name;
+		std::string opponent_name;
 
 		void receiveMessageGameRequest(NetworkMessage *message);
+		void receiveMessageGameRequestAnswer(NetworkMessage *message);
 	public:
 		//from NetworkObserver
 		virtual void receiveMessage(NetworkMessage *message);
@@ -48,6 +51,7 @@ namespace quoridor {
 		void connect(std::string &username);
 		static LogicTick *getTicker();
 		void makeGameRequest(std::string &opponent);
+		void acceptGameRequest(bool answer);
 		~GameLogic();
 	};
 }

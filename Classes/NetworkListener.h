@@ -36,6 +36,7 @@ public:
 	vector<string>& getAllPlayersInCurrentRoom();
 	string getLocalPlayerName();
 	void sendGameRequestToOpponent(string &opponent);
+	void sendMessageToPlayerInCurrentRoom(GameRequestAnswerMessage& message, string &opponent_name);
 private:
 	vector<string> current_room_players;
 	vector<int> current_room_players_numbers;
