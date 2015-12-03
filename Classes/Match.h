@@ -18,6 +18,7 @@ class Match {
 	Position pos;
 	static bool checkMove(Move &move);
 	void updatePosition(Move &move);
+	void update(Move &move);
 public:
 	Match(MatchType in_type, std::vector<std::string> &players);
 	void onLocalMove(Move move, bool check);

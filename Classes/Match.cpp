@@ -21,7 +21,7 @@ Match::Match(MatchType in_type, std::vector<std::string> &players):turn(0) {
 	}
 }
 
-void Match::update(Move &move) {
+void Match::updatePosition(Move &move) {
 	switch (move.type) {
 	case Move::MoveType::MOVE_PAWN:
 		pos.pawn_positions[turn] = PawnPosition(move.pos);
@@ -31,7 +31,7 @@ void Match::update(Move &move) {
 	}
 }
 
-bool checkMove(Move &move) {
+bool Match::checkMove(Move &move) {
 	return true;
 }
 
