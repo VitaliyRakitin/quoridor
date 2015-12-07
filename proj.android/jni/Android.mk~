@@ -14,7 +14,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/LogInScene.cpp \
                    ../../Classes/GameLogic.cpp \
                    ../../Classes/StartScene.cpp \
-                   ../../Classes/ChooseOpponentScene.cpp \
+                   ../../Classes/ChooseOpponentScene.cpp
                    ../../Classes/PlayWithBot.cpp
 
 MY_PHOTON_PATH = /home/zerg/Project/Photon-AndroidNDK-Sdk_v4-0-4-1/

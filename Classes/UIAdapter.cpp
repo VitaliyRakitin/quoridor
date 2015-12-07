@@ -2,6 +2,7 @@
 #include "LogInScene.h"
 #include "GameLogic.h"
 #include "StartScene.h"
+#include "PlayWithBot.h"
 #include "ChooseOpponentScene.h"
 
 USING_NS_CC;
@@ -33,6 +34,12 @@ void UIAdapter::onNetworkGameChosen() {
 	cur_scene = LogInScene::createScene();
 	Director::getInstance()->replaceScene(cur_scene);
 }
+
+void UIAdapter::onPlayWithBot() {
+	cur_scene = PlayWithBot::createScene();
+	Director::getInstance()->replaceScene(cur_scene);
+}
+
 
 void UIAdapter::renderChooseOpponentScene(vector<string>& all_players) {
 	cocos2d::log("GRINLOG:UIAdapter::renderChooseOpponentScene");

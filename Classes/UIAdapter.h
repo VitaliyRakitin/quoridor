@@ -22,6 +22,7 @@ namespace quoridor {
 		UIAdapter();
 		void renderLogInScence();
 		void onNetworkGameChosen();
+		void onPlayWithBot();
 		void renderChooseOpponentScene(vector<string>& all_players);
 		void start();
 		void addTickerToCurrentScene();
