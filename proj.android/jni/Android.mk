@@ -21,7 +21,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/GameData.cpp \
                    ../../Classes/PlayWithBot.cpp
 
-MY_PHOTON_PATH = /home/grin/projects/technosfera/advcpp/quoridor/Photon-AndroidNDK-Sdk_v4-0-4-1/
+MY_PHOTON_PATH = /home/grin/projects/technosfera/advcpp/quorridor/Photon-AndroidNDK-Sdk_v4-0-4-1/
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes $(MY_PHOTON_PATH)
 

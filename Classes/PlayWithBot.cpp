@@ -167,14 +167,15 @@ PlayWithBot* PlayWithBot::createScene()
     mySprite->addChild(player2);
     player2->setScale(mySprite->getContentSize().height / (9 * player2->getContentSize().height));
 
-    mySprite->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 25);
-    mySprite->setScale((visibleSize.height / mySprite->getContentSize().height));
+    mySprite->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+    auto alpha = visibleSize.height / mySprite->getContentSize().height;
+    mySprite->setScale(alpha);
     scene->addChild(mySprite);
     //here i start add bricks
 	bricks[18].sprite = Sprite::create("brickImage.png");
 	bricks[19].sprite = Sprite::create("brickRevImage.png");
-	bricks[18].sprite->setScale(mySprite->getContentSize().width / (3.5 * bricks[18].sprite->getContentSize().width));
-	bricks[19].sprite->setScale(mySprite->getContentSize().width / (3.5 * bricks[19].sprite->getContentSize().height));
+	bricks[18].sprite->setScale(alpha);
+	bricks[19].sprite->setScale(alpha);
 	scene->addChild(bricks[18].sprite);
 	scene->addChild(bricks[19].sprite);
 	bricks[18].sprite->setVisible(false);
@@ -185,7 +186,7 @@ PlayWithBot* PlayWithBot::createScene()
     		bricks[i*9 + j].x = -1;
     		bricks[i*9 + j].y = -1;
     		bricks[i*9 + j].reverse = 0;
-    		bricks[i*9 + j].sprite->setScale(mySprite->getContentSize().width / (3.5 * bricks[i*9 + j].sprite->getContentSize().width));
+    		bricks[i*9 + j].sprite->setScale(alpha);
     		float width = bricks[i*9 + j].sprite->getContentSize().width;
     		bricks[i*9 + j].sprite->setPosition(visibleSize.width - 1 - width / 2.0 - width * (i + i*0.2),visibleSize.height - j * width / 2 - 15*i);
     		scene->addChild(bricks[i*9 + j].sprite);
