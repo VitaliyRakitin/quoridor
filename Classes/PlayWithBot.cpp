@@ -154,13 +154,21 @@ PlayWithBot* PlayWithBot::createScene()
     Size visibleSize = director->getVisibleSize();
     auto ui_adapter = GameLogic::getUIAdapter();
     Sprite* mySprite = Sprite::create("desk.png");
+    //player1
     Sprite* player = Sprite::create("player.png");
     player->setAnchorPoint(Vec2(0, 0));
     player->setPosition(0, 0);
     mySprite->addChild(player);
+    player->setScale(mySprite->getContentSize().height / (9 * player->getContentSize().height));
+    //player2
+    Sprite* player2 = Sprite::create("player2.png");
+    player2->setAnchorPoint(Vec2(0, 0));
+    player2->setPosition(player2->getContentSize().height * 8, player2->getContentSize().height * 8);
+    mySprite->addChild(player2);
+    player2->setScale(mySprite->getContentSize().height / (9 * player2->getContentSize().height));
+
     mySprite->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 25);
     mySprite->setScale((visibleSize.height / mySprite->getContentSize().height));
-    player->setScale(mySprite->getContentSize().height / (9 * player->getContentSize().height));
     scene->addChild(mySprite);
     //here i start add bricks
 	bricks[18].sprite = Sprite::create("brickImage.png");
@@ -186,12 +194,19 @@ PlayWithBot* PlayWithBot::createScene()
     //here i stop add bricks
     auto eventListener = EventListenerTouchOneByOne::create();
     eventListener->onTouchBegan = [=](Touch *touch, Event *unused_event) -> bool {
+    	static int first_move = 1;
     	Vec2 touch_loc = touch->getLocation();
     	Vec2 tt = FindIJfield(touch_loc,mySprite->getBoundingBox());
     	if (tt.x != -1 && tt.y != -1) {
     		 float cur = player->getContentSize().height;
     		 auto actionMove = MoveTo::create(1, Vec2(cur*tt.x, cur*tt.y));
-    		 player->runAction(actionMove);
+    		 if (first_move) {
+    			 first_move = 1 - first_move;
+    			 player->runAction(actionMove);
+    		 } else {
+    			 first_move = 1 - first_move;
+    			 player2->runAction(actionMove);
+    		 }
     	} else {
     		was_touch_block  = FindNumberBlock(touch_loc);
     		save_pos = bricks[was_touch_block].sprite->getPosition();
@@ -214,9 +229,9 @@ PlayWithBot* PlayWithBot::createScene()
 
         		//bricks[was_touch_block].sprite->setPosition();
         	} else {
-        		if (inField(touch_loc,mySprite->getBoundingBox())) {
+        		//if (inField(touch_loc,mySprite->getBoundingBox())) {
         			bricks[was_touch_block].sprite->setPosition(save_pos);
-        		}
+        		//}
         	}
         	bricks[18 + bricks[was_touch_block].reverse].sprite->setVisible(false);
         	was_touch_block = -1;
@@ -233,53 +248,4 @@ PlayWithBot* PlayWithBot::createScene()
     scene->addChild(menu);
 
     return scene;
-}
-
-Field::Field() {}
-Field::~Field() {}
-Field* Field::create()
-{
-	Field* result = (Field*)Sprite::create("field.png");
-	result->addEvents();
-	return result;
-}
-
-void Field::initOptions(float x, float y)
-{
-	this->setPosition(x,y);
-	this->setScale(3);
-    // do things here like setTag(), setPosition(), any custom logic.
-}
-
-void Field::addEvents()
-{
-    auto listener = cocos2d::EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
-    listener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event)
-    {
-    	cocos2d::log("Was touch");
-        cocos2d::Vec2 p = touch->getLocation();
-        cocos2d::Rect rect = this->getBoundingBox();
-        cocos2d::log("Our pos - %f %f",p.x,p.y);
-        cocos2d::log("Box pos - %f %f %f %f",rect.getMinX(),rect.getMinY(),rect.getMaxX(),rect.getMaxY());
-        if(rect.containsPoint(p))
-        {
-        	cocos2d::log("Was true touch!");
-            return true; // to indicate that we have consumed it.
-        }
-
-        return false; // we did not consume this event, pass thru.
-    };
-
-    listener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event)
-    {
-    	Field::touchEvent(touch,0);
-    };
-
-    cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);
-}
-
-void Field::touchEvent(cocos2d::Touch* touch, cocos2d::Vec2 _p)
-{
-	cocos2d::log("dsdss");
 }
