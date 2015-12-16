@@ -20,8 +20,7 @@ StartScene* StartScene::createScene()
     MenuItemFont::setFontName("Marker Felt.ttf");
 
     auto localGameItem = MenuItemFont::create("Local Game", [=](Ref *sender){
-    	vector<string> v;
-    	director->replaceScene(ChooseOpponentScene::createScene(v));
+    	ui_adapter->onPlayWithBot();
     });
     auto networkGameItem = MenuItemFont::create("Network Game",
     [=](Ref* sender){
